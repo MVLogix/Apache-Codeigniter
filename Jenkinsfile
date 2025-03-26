@@ -14,7 +14,7 @@ pipeline {
                 script {
                     sh 'sudo apt install apache2 php php-cli php-common php-imap php-redis php-snmp php-xml php-zip php-mbstring php-curl libapache2-mod-php php-intl -y'
 					
-		    sh 'sudo curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer'
+		    sh 'sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/bin --filename=composer'
 					
 		    sh 'sudo a2enmod rewrite'
 					
