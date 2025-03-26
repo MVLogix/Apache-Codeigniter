@@ -12,13 +12,13 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'apt install apache2 php php-cli php-common php-imap php-redis php-snmp php-xml php-zip php-mbstring php-curl libapache2-mod-php php-intl -y'
+                    sh 'sudo apt install apache2 php php-cli php-common php-imap php-redis php-snmp php-xml php-zip php-mbstring php-curl libapache2-mod-php php-intl -y'
 					
-					sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer'
+		    sh 'sudo curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer'
 					
-					sh 'a2enmod rewrite'
+		    sh 'sudo a2enmod rewrite'
 					
-                    sh 'systemctl restart apache2'
+                    sh 'sudo systemctl restart apache2'
                 }
             }
         }
@@ -29,12 +29,12 @@ pipeline {
                 script {
                     
                     // Set proper permissions for Apache to access the app
-                    sh 'chown -R www-data:www-data /var/www/html/codeigniterapp'
-                    sh 'chmod -R 755 /var/www/html/codeigniterapp'
+                    sh 'sudo chown -R www-data:www-data /var/www/html/codeigniterapp'
+                    sh 'sudo chmod -R 755 /var/www/html/codeigniterapp'
 					
 		    sh 'cd /etc/apache2/sites-available'
-		    sh 'a2ensite mycodeigapp.conf'
-		    sh 'systemctl reload apache2.service'
+		    sh 'sudo a2ensite mycodeigapp.conf'
+		    sh 'sudo systemctl reload apache2.service'
                 }
             }
         }
