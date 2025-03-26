@@ -60,6 +60,7 @@ writable/session/*
 writable/uploads/*
 !writable/uploads/index.html
 
+temp_auto_push.bat
 writable/debugbar/*
 !writable/debugbar/.gitkeep
 
@@ -120,7 +121,8 @@ nb-configuration.xml
 /api/
 
 # Visual Studio Code
-.vscode/
 
 /results/
 /phpunit*.xml
+.gitignore
+temp_interactive_push.bat
