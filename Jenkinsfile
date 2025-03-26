@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+	SSH_CREDENTIALS_ID = 'remote_ssh_key'
+    }
+
     
     stages {
         stage('Git clone') {
@@ -9,32 +13,24 @@ pipeline {
             }
         }
         
-        stage('Install Dependencies') {
+        
+        stage('Deploy') {
             steps {
                 script {
-                    sh 'sudo apt install apache2 php php-cli php-common php-imap php-redis php-snmp php-xml php-zip php-mbstring php-curl libapache2-mod-php php-intl -y'
-					
-		    sh 'sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/bin --filename=composer'
-					
-		    sh 'sudo a2enmod rewrite'
-					
-                    sh 'sudo systemctl restart apache2'
-                }
-            }
-        }
-        
-        
-        stage('Deploy Locally') {
-            steps {
-                script {
+
+		    sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+                            
+
+			// Set proper permissions for Apache to access the app
+                    	sh 'sudo chown -R www-data:www-data /var/www/html/codeigniterapp'
+                    	sh 'sudo chmod -R 755 /var/www/html/codeigniterapp'
+                                        
+                	sh 'cd /etc/apache2/sites-available'
+        	        sh 'sudo a2ensite mycodeigapp.conf'
+	                sh 'sudo systemctl reload apache2.service'
+
+                    }
                     
-                    // Set proper permissions for Apache to access the app
-                    sh 'sudo chown -R www-data:www-data /var/www/html/codeigniterapp'
-                    sh 'sudo chmod -R 755 /var/www/html/codeigniterapp'
-					
-		    sh 'cd /etc/apache2/sites-available'
-		    sh 'sudo a2ensite mycodeigapp.conf'
-		    sh 'sudo systemctl reload apache2.service'
                 }
             }
         }
